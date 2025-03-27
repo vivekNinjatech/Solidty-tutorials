@@ -63,3 +63,58 @@ contract FunctionAssignment {
         return 3;
     }
 }
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+// 309 gas
+contract Cons {
+    uint16 public constant pie = 314;
+}
+
+// 2443 gas
+contract Cons2 {
+    uint16 public pie = 314;
+}
+
+contract Errors {
+    // gas refunded, state updates are reverted
+    // use csutom errors to save gas
+
+    // * require
+    // used to validate inputs and for access controll, controll who gets to call the function
+    function testRequire(uint256 value) public pure {
+        require(1 == value, "It's incorrect");
+    }
+
+    // * revert
+    // better option if the checking is under lots of if statements
+    function testRevert() public pure {
+        if (1 == 1) {
+            revert("It's a lie");
+        }
+    }
+
+    // * assert
+    // used to check condition that should always be true,
+    // if the condition gets false that means there's a bug in your smart contract
+    bool flag = false;
+
+    function testAssert(bool check) public view {
+        assert(flag == check);
+    }
+
+    function makeSwitch() public {
+        flag = !flag;
+    }
+
+
+
+
+    // custom error
+    error CustomError(uint, address);
+    function throwCustomError(uint256 intVal, address add) public pure {
+        revert CustomError(intVal, add);
+    }
+}
